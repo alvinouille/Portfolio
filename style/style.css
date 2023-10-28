@@ -53,14 +53,13 @@ nav div a {
     font-weight: 500;
 }
 
-.graphic-intro p {
+.graphic-intro .text-container {
     position:absolute;
     bottom:2vh;
-    left:1vh;
-    font-size:1.2em;
-    font-weight:bold;
-    text-align: right;
-    width:11em;
+    left:2vh;
+    font-size:1.6em;
+    text-align: left;
+    width:12em;
 }
 
 .graphic-intro img {
