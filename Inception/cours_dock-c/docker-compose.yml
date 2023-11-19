@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  front:
+    build: 
+      context: ./
+      dockerfile: docker.file
+    ports:
+    - "7777:7777"
+    networks:
+    - front
+    depends_on: #attend creation de db pour se creer
+    - db
+
+  backend:
+    image: node:slim
+    ports:
+    - "8888:8888"
+    networks:
+    - backend
+    depends_on:
+    - db
+    entrypoint:  #ecrase entrypoint de base de l'image de node
+    - "node"
+    - "-e"
+    - "require('http').createServer(function (req, res) { res.end('conteneur backend node'); }).listen(8888)"
+    #command: # si entrypoint default : arguments / sinon toute la commande
+
+  db:
+    image: mongo
+    ports:
+    - "27017" #expose ce port la pour connection reseau avec autres containeurs
+    networks:
+    - db
+    volumes:
+    - "db-data:/var/lib/mongodb" #ici que se trouve les dbde l'image mongodb, donc donnees sauvegardees
+    logging:
+      driver: none #pour pas afficher log au demarrage du conteneur, ex d'arg : "json-file" > fichier format json, etc... configuration log driver
+
+networks: #sans arg creer network vide par defaut
+  front :
+  backend :
+  db :
+
+volumes:
+  db-data:
+  #- "/home/chemin/ou/acceder/vol" pour acceder au volume depuis hotw
+
+#installer docker-compose: sudo curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+#sudo chmod +x /usr/local/bin/docker-compose
